@@ -97,7 +97,7 @@
         "brand_2": {
           "type": "brand",
           "settings": {
-            "name": "HOMIES",
+            "name": "brand01",
             "description": "Bold essentials for everyday culture.",
             "link": ""
           }
@@ -105,7 +105,7 @@
         "brand_3": {
           "type": "brand",
           "settings": {
-            "name": "imagen_ruka",
+            "name": "brand02",
             "description": "Visual-driven fashion with a cinematic edge.",
             "link": ""
           }
