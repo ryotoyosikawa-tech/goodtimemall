@@ -79,11 +79,100 @@
         "padding_top": 36,
         "padding_bottom": 36
       }
+    },
+    "brand_hgs_cta_mCqgU7": {
+      "type": "brand-hgs-cta",
+      "name": "HGS CTA",
+      "settings": {
+        "heading": "SHOP THE COLLECTION",
+        "button_text": "VIEW ALL ITEMS"
+      }
+    },
+    "brand_hgs_designer_eYc3fU": {
+      "type": "brand-hgs-designer",
+      "name": "HGS Designer",
+      "settings": {
+        "quote": "<p>\"着るだけで自分の居場所を見つけられる。そんな服を作りたかった。ホームグラウンドは、手の中にある。\"</p>",
+        "attribution": "— Founder, HOME GROUND STORE"
+      }
+    },
+    "brand_hgs_lookbook_gphpm7": {
+      "type": "brand-hgs-lookbook",
+      "blocks": {
+        "look_wPApiR": {
+          "type": "look",
+          "settings": {}
+        },
+        "look_etrP3Q": {
+          "type": "look",
+          "settings": {}
+        },
+        "look_W4rXxL": {
+          "type": "look",
+          "settings": {}
+        },
+        "look_CLyerg": {
+          "type": "look",
+          "settings": {}
+        },
+        "look_kMeDc3": {
+          "type": "look",
+          "settings": {}
+        },
+        "look_k78VYM": {
+          "type": "look",
+          "settings": {}
+        }
+      },
+      "block_order": [
+        "look_wPApiR",
+        "look_etrP3Q",
+        "look_W4rXxL",
+        "look_CLyerg",
+        "look_kMeDc3",
+        "look_k78VYM"
+      ],
+      "name": "HGS Lookbook",
+      "settings": {
+        "label": "Lookbook",
+        "season": "SS26"
+      }
+    },
+    "brand_hgs_hero_KCeKx8": {
+      "type": "brand-hgs-hero",
+      "name": "HGS Hero",
+      "settings": {
+        "label": "Good Time Mall — Brand",
+        "tagline": "Streetwear rooted in comfort and self-expression.",
+        "year_text": "Est. 2024 / Tokyo"
+      }
+    },
+    "brand_hgs_manifesto_qL6dmJ": {
+      "type": "brand-hgs-manifesto",
+      "name": "HGS Manifesto",
+      "settings": {
+        "label": "Our Story",
+        "heading": "YOUR GROUND, YOUR RULES.",
+        "body": "<p>一人一人がホームグラウンドに立ちそれぞれが活躍できる場所や分野を大切にしたい。そんな思いを込めて、HOME GROUND STOREは2024年3月に誕生しました。</p><p>ストリートカルチャーをベースに、着る人の「自分らしさ」を引き出すプロダクトを追求。快適さと自己表現を両立させるウェアは、日常をそのままホームグラウンドに変えます。</p><p>派手さではなく、身に付ける瞬間に感じる「しっくりくる」感覚をーーそれがHGSの考えるストリートウェアです。</p>"
+      }
+    },
+    "brand_hgs_products_fHWt8x": {
+      "type": "brand-hgs-products",
+      "name": "HGS Products",
+      "settings": {
+        "products_to_show": 12
+      }
     }
   },
   "order": [
     "image_with_text_z7NKgw",
     "banner",
-    "product-grid"
+    "product-grid",
+    "brand_hgs_cta_mCqgU7",
+    "brand_hgs_designer_eYc3fU",
+    "brand_hgs_lookbook_gphpm7",
+    "brand_hgs_hero_KCeKx8",
+    "brand_hgs_manifesto_qL6dmJ",
+    "brand_hgs_products_fHWt8x"
   ]
 }
