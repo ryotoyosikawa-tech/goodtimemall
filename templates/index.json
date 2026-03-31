@@ -83,6 +83,46 @@
         "section_padding_bottom": 80
       }
     },
+    "featured_brands_section": {
+      "type": "featured-brands",
+      "blocks": {
+        "brand_1": {
+          "type": "brand",
+          "settings": {
+            "name": "HOME GROUND STORE",
+            "description": "Streetwear rooted in comfort and self-expression.",
+            "link": ""
+          }
+        },
+        "brand_2": {
+          "type": "brand",
+          "settings": {
+            "name": "HOMIES",
+            "description": "Bold essentials for everyday culture.",
+            "link": ""
+          }
+        },
+        "brand_3": {
+          "type": "brand",
+          "settings": {
+            "name": "imagen_ruka",
+            "description": "Visual-driven fashion with a cinematic edge.",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "brand_1",
+        "brand_2",
+        "brand_3"
+      ],
+      "settings": {
+        "heading": "FEATURED BRANDS",
+        "subheading": "Discover the brands that define Good Time Mall",
+        "padding_top": 80,
+        "padding_bottom": 80
+      }
+    },
     "slideshow_KchgBC": {
       "type": "slideshow",
       "blocks": {
@@ -293,6 +333,7 @@
   "order": [
     "cinematic_hero_pki6KP",
     "trending_reels_GRhaeQ",
+    "featured_brands_section",
     "slideshow_KchgBC",
     "image_banner",
     "collection_list_jtYmHc",
