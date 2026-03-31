@@ -1,0 +1,275 @@
+/* assets/trending-reels.css */
+
+/* セクション全体 */
+.trending-reels {
+  background-color: #FAFAF8;
+  overflow: hidden; /* スライダーのはみ出しを隠す */
+}
+
+/* セクション見出し */
+.trending-reels__header {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 2rem 2.5rem;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+}
+
+.trending-reels__heading {
+  font-family: 'Anton', 'Arial Black', sans-serif;
+  font-size: clamp(1.5rem, 3vw, 2.2rem);
+  font-weight: 900;
+  color: #1A1A1A;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  line-height: 1;
+  margin: 0;
+}
+
+.trending-reels__subheading {
+  font-family: 'Helvetica Neue', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 300;
+  color: #9E9A90;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  margin: 0.5rem 0 0;
+}
+
+/* ナビゲーション矢印（PC用） */
+.trending-reels__nav {
+  display: flex;
+  gap: 8px;
+}
+
+.trending-reels__nav-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid #E8E6E1;
+  background: transparent;
+  color: #1A1A1A;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.trending-reels__nav-btn:hover {
+  background: #1A1A1A;
+  color: #FAFAF8;
+  border-color: #1A1A1A;
+}
+
+/* モバイルでは矢印非表示（スワイプで操作） */
+@media (max-width: 749px) {
+  .trending-reels__nav {
+    display: none;
+  }
+}
+
+/* カードスライダー（横スクロール） */
+.trending-reels__slider {
+  display: flex;
+  gap: 16px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch; /* iOS の慣性スクロール */
+  padding: 0 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* スクロールバー非表示 */
+.trending-reels__slider::-webkit-scrollbar {
+  display: none;
+}
+.trending-reels__slider {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* カード本体 */
+.trending-reels__card {
+  flex: 0 0 auto;
+  scroll-snap-align: start;
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s ease;
+
+  /* ★ 登場アニメーション用の初期状態 */
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+/* 登場済みクラス（JSから付与） */
+.trending-reels__card.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+              transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* PCでのホバー: カード全体がわずかに浮く */
+.trending-reels__card:hover {
+  transform: translateY(-4px);
+}
+
+/* カード幅: PC では4枚表示、タブレット3枚、モバイル2.3枚 */
+/* 2.3枚にすることで「横にもっとある」ことを示唆 */
+.trending-reels__card {
+  width: calc((100% - 48px) / 4); /* PC: 4枚 */
+  min-width: 200px;
+}
+
+@media (max-width: 999px) {
+  .trending-reels__card {
+    width: calc((100% - 32px) / 3); /* タブレット: 3枚 */
+  }
+}
+
+@media (max-width: 749px) {
+  .trending-reels__card {
+    width: 42vw; /* モバイル: 2.3枚見える幅 */
+    min-width: 160px;
+  }
+  .trending-reels__slider {
+    padding: 0 1rem;
+    gap: 12px;
+  }
+}
+
+/* メディア（動画 / 画像） */
+.trending-reels__media {
+  position: relative;
+  overflow: hidden;
+  border-radius: 4px;
+  background-color: #F3F2EE; /* ロード中の背景 */
+}
+
+.trending-reels__cover,
+.trending-reels__video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* 動画がある場合、カバー画像は動画再生開始後にフェードアウト */
+.trending-reels__cover {
+  z-index: 2;
+  transition: opacity 0.5s ease;
+}
+
+.trending-reels__card.is-playing .trending-reels__cover {
+  opacity: 0;
+}
+
+.trending-reels__video {
+  z-index: 1;
+}
+
+/* 画像のみの場合: ホバーで微かな Ken Burns ズーム */
+.trending-reels__cover--solo {
+  transition: transform 6s ease;
+}
+
+.trending-reels__card:hover .trending-reels__cover--solo {
+  transform: scale(1.05);
+}
+
+/* 下部グラデーション */
+.trending-reels__gradient {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 40%;
+  background: linear-gradient(to top, rgba(0,0,0,0.2) 0%, transparent 100%);
+  z-index: 3;
+  pointer-events: none;
+  border-radius: 0 0 4px 4px;
+}
+
+/* プレースホルダー */
+.trending-reels__placeholder {
+  width: 100%;
+  height: 100%;
+  background: #F3F2EE;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #9E9A90;
+  font-size: 2rem;
+}
+
+/* 再生インジケーター */
+.trending-reels__play-indicator {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 4;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+/* 再生中は非表示 */
+.trending-reels__card.is-playing .trending-reels__play-indicator {
+  opacity: 0;
+}
+
+/* テキスト情報 */
+.trending-reels__info {
+  padding: 10px 2px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.trending-reels__brand {
+  font-family: 'Helvetica Neue', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: #1A1A1A;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.trending-reels__caption {
+  font-family: 'Helvetica Neue', sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  color: #6B6963;
+  line-height: 1.4;
+  /* 1行に制限（溢れたら...） */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* 登場アニメーション + アクセシビリティ */
+/* prefers-reduced-motion: アニメーション無効化 */
+@media (prefers-reduced-motion: reduce) {
+  .trending-reels__card {
+    opacity: 1;
+    transform: none;
+  }
+  .trending-reels__cover--solo {
+    transition: none;
+  }
+}

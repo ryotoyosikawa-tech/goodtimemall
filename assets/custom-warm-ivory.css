@@ -1,0 +1,225 @@
+/* ========================================
+   Good Time Mall - Warm Ivory テーマ
+   ======================================== */
+
+/* --- グローバル背景 --- */
+body,
+.shopify-section:not(.cinematic-hero-section) {
+  background-color: #FAFAF8;
+  color: #1A1A1A;
+}
+
+/* --- ヘッダー --- */
+/* 通常時（スクロール後）のヘッダー */
+.header-wrapper {
+  background-color: #FAFAF8;
+  border-bottom: 0.5px solid #E8E6E1;
+}
+
+.header-wrapper .header a,
+.header-wrapper .header button,
+.header-wrapper .header .header__heading-link {
+  color: #1A1A1A;
+}
+
+/* ★ ヒーロー上の透過ヘッダー時は白文字のまま（JSで制御中） */
+/* スクロール後に背景が切り替わる際の色もWarm Ivoryに */
+
+/* --- ナビゲーション --- */
+.header__menu-item,
+.menu-drawer__menu-item {
+  color: #1A1A1A;
+}
+
+.header__menu-item:hover {
+  color: #6B6963;
+}
+
+/* ドロップダウンメニュー */
+.header__submenu,
+.mega-menu__content {
+  background-color: #FAFAF8;
+  border: 0.5px solid #E8E6E1;
+}
+
+/* --- メインコンテンツエリア --- */
+.main-content,
+.template-index,
+.template-collection,
+.template-product {
+  background-color: #FAFAF8;
+}
+
+/* --- セクション全般 --- */
+.shopify-section {
+  background-color: #FAFAF8;
+}
+
+/* セカンダリ背景のセクション（交互に使う場合） */
+.section--secondary-bg {
+  background-color: #F3F2EE;
+}
+
+/* --- 商品カード --- */
+.card-wrapper,
+.product-card-wrapper {
+  background-color: #FAFAF8;
+}
+
+.card-wrapper:hover {
+  /* ホバー時に微かなシャドウではなく、背景色変化で表現 */
+  background-color: #F3F2EE;
+  transition: background-color 0.3s ease;
+}
+
+.card__heading a,
+.card__heading {
+  color: #1A1A1A;
+}
+
+.card .price {
+  color: #1A1A1A;
+}
+
+/* --- ボタン --- */
+/* プライマリボタン */
+.button--primary,
+.shopify-payment-button .shopify-payment-button__button--unbranded {
+  background-color: #1A1A1A;
+  color: #FAFAF8;
+  border: none;
+  transition: all 0.3s ease;
+}
+
+.button--primary:hover {
+  background-color: #333;
+}
+
+/* セカンダリボタン */
+.button--secondary {
+  background-color: transparent;
+  color: #1A1A1A;
+  border: 1px solid #1A1A1A;
+  transition: all 0.3s ease;
+}
+
+.button--secondary:hover {
+  background-color: #1A1A1A;
+  color: #FAFAF8;
+}
+
+/* --- テキストスタイル --- */
+h1, h2, h3, h4, h5 {
+  color: #1A1A1A;
+}
+
+/* サブテキスト */
+.subtitle,
+.rte p,
+.product__description p {
+  color: #6B6963;
+}
+
+/* --- フッター --- */
+.footer {
+  background-color: #1A1A1A; /* フッターはダークに残す = 額縁効果 */
+  color: #FAFAF8;
+}
+
+.footer a {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.footer a:hover {
+  color: #FFFFFF;
+}
+
+.footer h2,
+.footer .footer__heading {
+  color: #FAFAF8;
+}
+
+/* --- アクセントカラー（ロゴの黄色）の使い方 --- */
+/* セールバッジ */
+.badge--sale,
+.badge--accent {
+  background-color: #F5C800;
+  color: #1A1A1A;
+}
+
+/* NEW バッジ */
+.badge--new {
+  background-color: #1A1A1A;
+  color: #FAFAF8;
+}
+
+/* リンクのホバー（アクセント色をわずかに） */
+.card__heading a:hover {
+  color: #6B6963;
+  transition: color 0.2s ease;
+}
+
+/* --- フォーム要素 --- */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+input[type="tel"],
+textarea,
+select {
+  background-color: #FAFAF8;
+  border: 1px solid #E8E6E1;
+  color: #1A1A1A;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: #1A1A1A;
+  outline: none;
+}
+
+/* --- 区切り線 --- */
+hr,
+.divider {
+  border-color: #E8E6E1;
+}
+
+/* --- コレクションページ --- */
+.collection-hero {
+  background-color: #F3F2EE;
+}
+
+/* フィルター・ソート */
+.facets-wrapper {
+  border-bottom: 0.5px solid #E8E6E1;
+}
+
+/* --- カートドロワー --- */
+.cart-drawer,
+.cart-items {
+  background-color: #FAFAF8;
+}
+
+/* --- 告知バー（Announcement Bar） --- */
+.announcement-bar {
+  background-color: #1A1A1A;
+  color: #FAFAF8;
+}
+
+/* ========================================
+   ★ ヒーローセクション保護
+   以下のセレクターで、Cinematic Heroセクションの
+   ダークテーマが上記のスタイルで上書きされないようにする
+   ======================================== */
+.cinematic-hero,
+.cinematic-hero * {
+  /* このセクション内は既存のダークスタイルを維持 */
+  /* 上記のグローバルスタイルの影響を受けないようにする */
+}
+
+/* イントロオーバーレイもダーク維持 */
+.intro-overlay {
+  background: #000000 !important;
+  color: #FFFFFF !important;
+}

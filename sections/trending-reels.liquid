@@ -1,0 +1,352 @@
+{{ 'trending-reels.css' | asset_url | stylesheet_tag }}
+
+<section class="trending-reels"
+         style="padding-top: {{ section.settings.section_padding_top }}px;
+                padding-bottom: {{ section.settings.section_padding_bottom }}px;">
+
+  <!-- セクション見出し -->
+  <div class="trending-reels__header">
+    <div class="trending-reels__header-text">
+      {% if section.settings.section_heading != blank %}
+        <h2 class="trending-reels__heading">
+          {{ section.settings.section_heading }}
+        </h2>
+      {% endif %}
+      {% if section.settings.section_subheading != blank %}
+        <p class="trending-reels__subheading">
+          {{ section.settings.section_subheading }}
+        </p>
+      {% endif %}
+    </div>
+    <!-- PC用ナビゲーション矢印 -->
+    <div class="trending-reels__nav">
+      <button class="trending-reels__nav-btn trending-reels__nav-prev" aria-label="Previous">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+          <path d="M13 4L7 10L13 16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+      </button>
+      <button class="trending-reels__nav-btn trending-reels__nav-next" aria-label="Next">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+          <path d="M7 4L13 10L7 16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- カードスライダー -->
+  <div class="trending-reels__slider" id="reelsSlider-{{ section.id }}">
+    {% for block in section.blocks %}
+      <a href="{{ block.settings.link_url | default: '#' }}"
+         class="trending-reels__card"
+         {{ block.shopify_attributes }}>
+
+        <!-- メディア（動画 or 画像） -->
+        <div class="trending-reels__media"
+             style="aspect-ratio: {% if section.settings.card_ratio == '9:16' %}9/16{% else %}4/5{% endif %};">
+
+          {% if block.settings.video_url != blank %}
+            <!-- 動画あり: カバー画像 + 動画（JS で再生制御） -->
+            {% if block.settings.cover_image != blank %}
+              <img class="trending-reels__cover"
+                   src="{{ block.settings.cover_image | image_url: width: 600 }}"
+                   alt="{{ block.settings.brand_name | escape }}"
+                   loading="lazy" />
+            {% endif %}
+            <video class="trending-reels__video"
+                   muted loop playsinline preload="none"
+                   data-src="{{ block.settings.video_url }}">
+            </video>
+          {% elsif block.settings.cover_image != blank %}
+            <!-- 画像のみ: Ken Burns 風の微かなズーム -->
+            <img class="trending-reels__cover trending-reels__cover--solo"
+                 src="{{ block.settings.cover_image | image_url: width: 600 }}"
+                 alt="{{ block.settings.brand_name | escape }}"
+                 loading="lazy" />
+          {% else %}
+            <!-- 何も設定されていない場合のプレースホルダー -->
+            <div class="trending-reels__placeholder">
+              <span>+</span>
+            </div>
+          {% endif %}
+
+          <!-- 再生インジケーター（動画がある場合のみ） -->
+          {% if block.settings.video_url != blank %}
+            <div class="trending-reels__play-indicator">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path d="M5 3L13 8L5 13V3Z" fill="white" fill-opacity="0.9"/>
+              </svg>
+            </div>
+          {% endif %}
+
+          <!-- 下部グラデーション（テキスト視認性用） -->
+          <div class="trending-reels__gradient"></div>
+        </div>
+
+        <!-- テキスト情報 -->
+        <div class="trending-reels__info">
+          <span class="trending-reels__brand">{{ block.settings.brand_name }}</span>
+          {% if block.settings.caption != blank %}
+            <span class="trending-reels__caption">{{ block.settings.caption }}</span>
+          {% endif %}
+        </div>
+      </a>
+    {% endfor %}
+  </div>
+</section>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  var slider = document.getElementById('reelsSlider-{{ section.id }}');
+  if (!slider) return;
+
+  var cards = slider.querySelectorAll('.trending-reels__card');
+  if (cards.length === 0) return;
+
+  // ============================================================
+  // 1. 登場アニメーション（staggered fade-up）
+  // ============================================================
+  var appearObserver = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        // カードのインデックスに応じて遅延をつける
+        var card = entry.target;
+        var index = Array.from(cards).indexOf(card);
+        var delay = Math.min(index * 100, 500); // 最大0.5秒の遅延
+
+        setTimeout(function() {
+          card.classList.add('is-visible');
+        }, delay);
+
+        appearObserver.unobserve(card);
+      }
+    });
+  }, {
+    threshold: 0.1,
+    rootMargin: '0px 0px -50px 0px'
+  });
+
+  cards.forEach(function(card) {
+    appearObserver.observe(card);
+  });
+
+  // ============================================================
+  // 2. 動画再生制御（Intersection Observer）
+  // ============================================================
+  var videoObserver = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      var card = entry.target;
+      var video = card.querySelector('.trending-reels__video');
+      if (!video) return;
+
+      if (entry.isIntersecting) {
+        // 遅延読み込み: 初回表示時に src をセット
+        if (!video.src && video.dataset.src) {
+          video.src = video.dataset.src;
+        }
+
+        // モバイルの場合: 画面内に入ったら自動再生
+        // (設定で有効な場合)
+        {% if section.settings.autoplay_on_visible %}
+        if (window.innerWidth <= 749) {
+          var playPromise = video.play();
+          if (playPromise !== undefined) {
+             playPromise.then(function() {
+               card.classList.add('is-playing');
+             }).catch(function(error) {
+                // Auto-play was prevented
+             });
+          }
+        }
+        {% endif %}
+      } else {
+        // 画面外に出たら停止（パフォーマンス対策）
+        video.pause();
+        card.classList.remove('is-playing');
+      }
+    });
+  }, {
+    threshold: 0.5
+  });
+
+  // PCの場合: ホバーで再生
+  cards.forEach(function(card) {
+    var video = card.querySelector('.trending-reels__video');
+    if (!video) return;
+
+    videoObserver.observe(card);
+
+    {% if section.settings.autoplay_on_hover %}
+    if (window.innerWidth > 749) {
+      card.addEventListener('mouseenter', function() {
+        if (!video.src && video.dataset.src) {
+          video.src = video.dataset.src;
+        }
+        var playPromise = video.play();
+        if (playPromise !== undefined) {
+           playPromise.then(function() {
+             card.classList.add('is-playing');
+           }).catch(function() {});
+        }
+      });
+
+      card.addEventListener('mouseleave', function() {
+        video.pause();
+        video.currentTime = 0;
+        card.classList.remove('is-playing');
+      });
+    }
+    {% endif %}
+  });
+
+  // ============================================================
+  // 3. ナビゲーション矢印（PC用）
+  // ============================================================
+  var parentSection = slider.closest('.trending-reels');
+  var prevBtn = parentSection.querySelector('.trending-reels__nav-prev');
+  var nextBtn = parentSection.querySelector('.trending-reels__nav-next');
+
+  if (prevBtn && nextBtn) {
+    // 1カード分のスクロール量を計算
+    var getScrollAmount = function() {
+      var firstCard = slider.querySelector('.trending-reels__card');
+      if (!firstCard) return 300;
+      return firstCard.offsetWidth + 16; // カード幅 + gap
+    };
+
+    nextBtn.addEventListener('click', function() {
+      slider.scrollBy({ left: getScrollAmount(), behavior: 'smooth' });
+    });
+
+    prevBtn.addEventListener('click', function() {
+      slider.scrollBy({ left: -getScrollAmount(), behavior: 'smooth' });
+    });
+  }
+});
+</script>
+
+{% schema %}
+{
+  "name": "Trending Reels",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "section_heading",
+      "default": "TRENDING REELS",
+      "label": "Section Heading"
+    },
+    {
+      "type": "text",
+      "id": "section_subheading",
+      "default": "What's moving right now",
+      "label": "Section Subheading"
+    },
+    {
+      "type": "select",
+      "id": "card_ratio",
+      "options": [
+        {
+          "value": "9:16",
+          "label": "9:16"
+        },
+        {
+          "value": "4:5",
+          "label": "4:5"
+        }
+      ],
+      "default": "9:16",
+      "label": "Card Ratio"
+    },
+    {
+      "type": "checkbox",
+      "id": "autoplay_on_hover",
+      "default": true,
+      "label": "PC: Autoplay on hover"
+    },
+    {
+      "type": "checkbox",
+      "id": "autoplay_on_visible",
+      "default": true,
+      "label": "Mobile: Autoplay when visible"
+    },
+    {
+      "type": "range",
+      "id": "section_padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "default": 80,
+      "unit": "px",
+      "label": "Padding Top"
+    },
+    {
+      "type": "range",
+      "id": "section_padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "default": 80,
+      "unit": "px",
+      "label": "Padding Bottom"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "reel",
+      "name": "Reel Card",
+      "settings": [
+        {
+          "type": "text",
+          "id": "video_url",
+          "label": "Video URL",
+          "info": "URL to a video file hosted on Shopify Files or external CDN."
+        },
+        {
+          "type": "image_picker",
+          "id": "cover_image",
+          "label": "Cover Image",
+          "info": "Image shown before video plays, or as fallback if no video."
+        },
+        {
+          "type": "text",
+          "id": "brand_name",
+          "default": "BRAND NAME",
+          "label": "Brand Name"
+        },
+        {
+          "type": "text",
+          "id": "caption",
+          "default": "LOREM IPSUM DOLOR",
+          "label": "Caption (Optional)"
+        },
+        {
+          "type": "url",
+          "id": "link_url",
+          "label": "Card Link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Trending Reels",
+      "category": "Video",
+      "blocks": [
+        {
+          "type": "reel"
+        },
+        {
+          "type": "reel"
+        },
+        {
+          "type": "reel"
+        },
+        {
+          "type": "reel"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

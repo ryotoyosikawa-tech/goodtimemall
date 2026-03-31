@@ -1,0 +1,444 @@
+/* assets/cinematic-hero.css */
+/* 3-A. 全画面 & 基本 */
+.cinematic-hero {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  height: 100dvh; /* モバイルブラウザのアドレスバー対応 */
+  overflow: hidden;
+  background-color: #0a0a0a; /* 動画/画像ロード前の背景 */
+}
+
+/* 3-B. 動画背景 */
+.cinematic-hero__video {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  min-width: 100%;
+  min-height: 100%;
+  width: auto;
+  height: auto;
+  transform: translate(-50%, -50%);
+  object-fit: cover;
+}
+
+/* 3-C. Ken Burns フォールバック（動画なし時） */
+.cinematic-hero__fallback {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  animation: kenBurns 20s ease-in-out infinite alternate;
+  will-change: transform; /* GPU アクセラレーション */
+}
+
+@keyframes kenBurns {
+  0% {
+    transform: scale(1) translate(0, 0);
+  }
+  100% {
+    transform: scale(1.12) translate(-1.5%, -1%);
+  }
+}
+
+/* 3-D. シネマティック・オーバーレイ（ビネット効果） */
+.cinematic-hero__overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  /* 中央が少し明るく、上下・四隅が暗い映画的なグラデーション */
+  background:
+    linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.7) 0%,
+      rgba(0, 0, 0, 0.2) 30%,
+      rgba(0, 0, 0, 0.1) 50%,
+      rgba(0, 0, 0, 0.3) 70%,
+      rgba(0, 0, 0, 0.85) 100%
+    ),
+    radial-gradient(
+      ellipse at center,
+      transparent 40%,
+      rgba(0, 0, 0, 0.4) 100%
+    );
+  /* overlay_opacity は Liquid の inline style で制御 */
+}
+
+/* フィルムのグレイン（粒子）テクスチャ */
+.cinematic-hero__grain {
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  z-index: 3;
+  opacity: 0.035;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  animation: grain 0.5s steps(1) infinite;
+  will-change: transform;
+}
+
+@keyframes grain {
+  0%, 100% { transform: translate(0, 0); }
+  10% { transform: translate(-5%, -10%); }
+  30% { transform: translate(3%, -15%); }
+  50% { transform: translate(12%, 9%); }
+  70% { transform: translate(9%, 4%); }
+  90% { transform: translate(-1%, 7%); }
+}
+
+/* 3-E. 巨大タイポグラフィ */
+.cinematic-hero__heading {
+  font-family: 'Anton', 'Impact', 'Arial Black', sans-serif;
+  font-weight: 900;
+  color: #ffffff;
+  text-transform: uppercase;
+  letter-spacing: -0.02em; /* 太文字は少し詰める */
+  line-height: 0.9;
+  text-align: center;
+  margin: 0;
+
+  /* レスポンシブ: clamp() でPC〜モバイルまで自動調整 */
+  font-size: clamp(3rem, 12vw, 10rem);
+
+  /* テキストシャドウで奥行き */
+  text-shadow:
+    0 2px 40px rgba(0, 0, 0, 0.5),
+    0 0 120px rgba(0, 0, 0, 0.3);
+}
+
+.cinematic-hero__subheading {
+  font-family: 'Inter', 'Helvetica Neue', sans-serif;
+  font-weight: 300;
+  font-size: clamp(0.75rem, 1.5vw, 1.1rem);
+  color: rgba(255, 255, 255, 0.8);
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  margin-top: 1.5rem;
+  margin-bottom: 0;
+  text-align: center;
+}
+
+/* 3-F. 登場アニメーション */
+/* テキスト全体のコンテナ */
+.cinematic-hero__content {
+  position: relative;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding: 2rem;
+}
+
+/* ★ 重要: イントロ中はヒーローテキストを非表示にする */
+.cinematic-hero__heading,
+.cinematic-hero__subheading,
+.cinematic-hero__cta,
+.cinematic-hero__scroll {
+  opacity: 0;
+  transform: translateY(40px);
+  /* animation は JS から動的に付与する（イントロ終了後） */
+}
+
+/* 3-G. CTAボタン */
+.cinematic-hero__cta {
+  display: inline-block;
+  margin-top: 2.5rem;
+  padding: 1rem 3rem;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  color: #ffffff;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  text-decoration: none;
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  position: relative;
+  overflow: hidden;
+}
+
+.cinematic-hero__cta:hover {
+  background: #ffffff;
+  color: #0a0a0a;
+  border-color: #ffffff;
+  letter-spacing: 0.35em; /* ホバーで少し広がる */
+}
+
+/* 3-H. スクロールインジケーター */
+.cinematic-hero__scroll {
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 5;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* 4. モバイル対応 */
+@media (max-width: 749px) {
+  .cinematic-hero__heading {
+    font-size: clamp(2.5rem, 14vw, 5rem);
+    letter-spacing: -0.01em;
+  }
+
+  .cinematic-hero__subheading {
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+  }
+
+  .cinematic-hero__cta {
+    padding: 0.8rem 2rem;
+    font-size: 0.7rem;
+    margin-top: 2rem;
+  }
+
+  /* モバイルでは動画を非表示にし、画像 + Ken Burns に切り替える（データ通信量削減） */
+  .cinematic-hero__video {
+    display: none;
+  }
+  .cinematic-hero__fallback--mobile-only {
+    display: block;
+  }
+}
+
+/* Desktop override to hide the fallback if it's meant to be mobile only and video exists */
+@media (min-width: 750px) {
+  .cinematic-hero__fallback--mobile-only {
+    display: none;
+  }
+}
+
+/* ========================================
+   アクセシビリティ: モーション軽減
+   ======================================== */
+@media (prefers-reduced-motion: reduce) {
+  .intro-overlay {
+    display: none; /* イントロ自体をスキップ */
+  }
+  .cinematic-hero__fallback {
+    animation: none;
+  }
+  .cinematic-hero__heading,
+  .cinematic-hero__subheading,
+  .cinematic-hero__cta,
+  .cinematic-hero__scroll {
+    opacity: 1 !important;
+    transform: none !important;
+    animation: none !important;
+    transition: none !important;
+  }
+  .cinematic-hero__grain {
+    animation: none;
+  }
+}
+
+/* 5. ヘッダーとの統合（透過ヘッダー）のCSS */
+.cinematic-hero ~ .header-wrapper.header--transparent .header,
+.cinematic-hero ~ .header-wrapper.header--transparent .header a,
+.cinematic-hero ~ .header-wrapper.header--transparent .header__icon {
+  color: #ffffff !important;
+}
+
+.header-wrapper.header--transparent .header {
+  --color-foreground: 255, 255, 255;
+}
+.header-wrapper.header--transparent .header__icon {
+  color: #ffffff;
+}
+
+/* ========================================
+   INTRO OVERLAY（ロゴアニメーション画面）
+   ======================================== */
+.intro-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 100; /* ヒーローの全要素より上 */
+  background: #000000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* トランジション: イントロ終了時にフェードアウト */
+  transition: opacity 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+              filter 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.intro-overlay.is-hidden {
+  opacity: 0;
+  filter: blur(6px); /* ★ 高級トランジション: フェードアウト時にブラーをかける */
+  pointer-events: none;
+}
+
+/* フィルムグレイン */
+.intro-grain {
+  position: absolute;
+  inset: -50%;
+  width: 200%;
+  height: 200%;
+  opacity: 0.035;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+  animation: introGrain 0.4s steps(1) infinite;
+}
+
+@keyframes introGrain {
+  0%, 100% { transform: translate(0, 0); }
+  25% { transform: translate(-5%, -8%); }
+  50% { transform: translate(7%, 4%); }
+  75% { transform: translate(-3%, 6%); }
+}
+
+/* ビネット */
+.intro-vignette {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(ellipse 65% 65% at center, transparent 15%, rgba(0,0,0,0.55) 100%);
+}
+
+/* ライトスウィープ（レンズフレア風） */
+.intro-light-sweep {
+  position: absolute;
+  top: 0;
+  left: -120%;
+  width: 50%;
+  height: 100%;
+  pointer-events: none;
+  background: linear-gradient(
+    105deg,
+    transparent 30%,
+    rgba(255,255,255,0.02) 44%,
+    rgba(255,255,255,0.05) 50%,
+    rgba(255,255,255,0.02) 56%,
+    transparent 70%
+  );
+  opacity: 0;
+  transition: none;
+}
+
+/* フレームライン（上下） */
+.intro-frame-top,
+.intro-frame-bottom {
+  position: absolute;
+  left: 50%;
+  width: 0;
+  height: 0.5px;
+  background: rgba(255,255,255,0.05);
+  transform: translateX(-50%);
+  transition: none;
+}
+.intro-frame-top { top: 0; }
+.intro-frame-bottom { bottom: 0; }
+
+.intro-content {
+  position: relative;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ゴールデングロウ（ロゴ背後の光） */
+.intro-glow {
+  position: absolute;
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(245, 200, 0, 0.12) 0%,
+    rgba(245, 200, 0, 0.03) 45%,
+    transparent 70%
+  );
+  opacity: 0;
+  filter: blur(25px);
+  pointer-events: none;
+  margin-top: -20px;
+  transition: none;
+}
+
+/* ロゴマーク（GGアイコン） */
+.intro-logo {
+  width: 90px;
+  height: auto;
+  opacity: 0;
+  transform: scale(0.88);
+  filter: blur(14px) brightness(0.15);
+  transition: none;
+  position: relative;
+  z-index: 6;
+}
+
+/* ブランド名テキスト */
+.intro-brand-name {
+  font-family: 'Playfair Display', 'Georgia', 'Times New Roman', serif;
+  font-weight: 700;
+  font-style: italic;
+  font-size: 22px;
+  color: rgba(255, 255, 255, 0);
+  letter-spacing: 0.15em;
+  margin-top: 12px;
+  position: relative;
+  z-index: 6;
+  white-space: nowrap;
+  transition: none;
+}
+
+/* ディバイダーライン */
+.intro-divider {
+  width: 0;
+  height: 0.5px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  margin-top: 10px;
+  opacity: 0;
+  position: relative;
+  z-index: 6;
+  transition: none;
+}
+
+/* タグライン */
+.intro-tagline {
+  font-family: 'Helvetica Neue', 'Arial', sans-serif;
+  font-weight: 300;
+  font-size: 8px;
+  letter-spacing: 0.6em;
+  font-style: italic;
+  color: rgba(255, 255, 255, 0);
+  margin-top: 8px;
+  position: relative;
+  z-index: 6;
+  transition: none;
+}
+
+/* ========================================
+   モバイル対応
+   ======================================== */
+@media (max-width: 749px) {
+  .intro-logo {
+    width: 70px;
+  }
+  .intro-brand-name {
+    font-size: 18px;
+  }
+  .intro-tagline {
+    font-size: 7px;
+    letter-spacing: 0.4em;
+  }
+}

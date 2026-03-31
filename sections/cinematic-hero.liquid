@@ -1,0 +1,352 @@
+{{ 'cinematic-hero.css' | asset_url | stylesheet_tag }}
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@300;500&family=Playfair+Display:ital,wght@1,700&display=swap" rel="stylesheet">
+
+<script>
+  // Dawn テーマのヘッダーを透過させる
+  document.addEventListener('DOMContentLoaded', function() {
+    const header = document.querySelector('.header-wrapper');
+    const heroSection = document.querySelector('.cinematic-hero');
+    
+    if (header && heroSection) {
+      header.classList.add('header--transparent');
+      header.style.position = 'absolute';
+      header.style.width = '100%';
+      header.style.zIndex = '10';
+      header.style.background = 'transparent';
+      // スクロール時に背景色を戻す
+      window.addEventListener('scroll', function() {
+        if (window.scrollY > 100) {
+          header.style.position = 'fixed';
+          header.style.background = 'rgba(250, 250, 248, 0.95)';
+          header.style.backdropFilter = 'blur(10px)';
+          header.style.borderBottom = '0.5px solid #E8E6E1';
+          header.style.transition = 'background 0.3s ease';
+          header.classList.remove('header--transparent');
+          // テキスト色をダークに変更
+          header.querySelectorAll('a, button, .header__icon').forEach(function(el) {
+            el.style.color = '#1A1A1A';
+          });
+        } else {
+          header.style.position = 'absolute';
+          header.style.background = 'transparent';
+          header.style.backdropFilter = 'none';
+          header.style.borderBottom = 'none';
+          header.classList.add('header--transparent');
+          // テキスト色はCSS（.header--transparent）に任せるためインラインスタイルを削除
+          header.querySelectorAll('a, button, .header__icon').forEach(function(el) {
+            el.style.removeProperty('color');
+          });
+        }
+      });
+    }
+
+    // === 要素取得 ===
+    var overlay   = document.getElementById('introOverlay');
+    var glow      = document.getElementById('introGlow');
+    var logo      = document.getElementById('introLogo');
+    var brandName = document.getElementById('introBrandName');
+    var divider   = document.getElementById('introDivider');
+    var tagline   = document.getElementById('introTagline');
+    var sweep     = document.getElementById('introSweep');
+    var frameTop  = document.getElementById('introFrameTop');
+    var frameBot  = document.getElementById('introFrameBot');
+
+    var heroHeading    = document.getElementById('heroHeading');
+    var heroSubheading = document.getElementById('heroSubheading');
+    var heroCta        = document.getElementById('heroCta');
+    var heroScroll     = document.getElementById('heroScroll');
+
+    // === イントロが存在しない場合は即座にヒーローを表示 ===
+    if (!overlay) {
+      showHero(0);
+      return;
+    }
+
+    // === セッション中は1回だけ再生（2回目以降はスキップ） ===
+    if (sessionStorage.getItem('gtm_intro_played')) {
+      overlay.style.display = 'none';
+      showHero(0);
+      return;
+    }
+
+    // ============================================================
+    // イントロアニメーション（2.5秒以内に完結）
+    // ============================================================
+
+    // [0.0s] ゴールデングロウ開始
+    setTimeout(function() {
+      glow.style.transition = 'opacity 1.5s ease';
+      glow.style.opacity = '1';
+    }, 0);
+
+    // [0.1s] ロゴ: ブラー → フォーカス（メインの演出）
+    setTimeout(function() {
+      logo.style.transition = 'opacity 1.6s cubic-bezier(0.25,0.46,0.45,0.94), transform 2s cubic-bezier(0.25,0.46,0.45,0.94), filter 2s ease';
+      logo.style.opacity = '1';
+      logo.style.transform = 'scale(1)';
+      logo.style.filter = 'blur(0px) brightness(1)';
+    }, 100);
+
+    // [0.8s] ブランド名テキスト登場
+    setTimeout(function() {
+      brandName.style.transition = 'color 1.2s cubic-bezier(0.25,0.46,0.45,0.94), letter-spacing 1.5s cubic-bezier(0.25,0.46,0.45,0.94)';
+      brandName.style.color = 'rgba(80, 80, 78, 0.85)';
+      brandName.style.letterSpacing = '0.02em';
+    }, 800);
+
+    // [1.0s] ライトスウィープ
+    setTimeout(function() {
+      sweep.style.transition = 'left 1.2s cubic-bezier(0.25,0.46,0.45,0.94), opacity 0.3s ease';
+      sweep.style.opacity = '1';
+      sweep.style.left = '130%';
+    }, 1000);
+
+    // [1.2s] フレームライン
+    setTimeout(function() {
+      frameTop.style.transition = 'width 1.3s cubic-bezier(0.25,0.46,0.45,0.94)';
+      frameBot.style.transition = 'width 1.3s cubic-bezier(0.25,0.46,0.45,0.94)';
+      frameTop.style.width = '100%';
+      frameBot.style.width = '100%';
+    }, 1200);
+
+    // [1.5s] ディバイダーライン
+    setTimeout(function() {
+      divider.style.transition = 'width 0.8s cubic-bezier(0.25,0.46,0.45,0.94), opacity 0.6s ease';
+      divider.style.width = '70px';
+      divider.style.opacity = '1';
+    }, 1500);
+
+    // [1.8s] タグライン
+    setTimeout(function() {
+      tagline.style.transition = 'color 0.8s ease, letter-spacing 1s cubic-bezier(0.25,0.46,0.45,0.94)';
+      tagline.style.color = 'rgba(255, 255, 255, 0.35)';
+      tagline.style.letterSpacing = '0.45em';
+    }, 1800);
+
+    // ============================================================
+    // [2.5s] 高級トランジション: イントロ → ヒーロー
+    // ============================================================
+    setTimeout(function() {
+      // イントロをブラー付きフェードアウト
+      overlay.classList.add('is-hidden');
+
+      // フェードアウト完了後にDOMから削除
+      setTimeout(function() {
+        overlay.style.display = 'none';
+      }, 1300);
+
+      // セッションストレージに記録
+      sessionStorage.setItem('gtm_intro_played', 'true');
+    }, 2500);
+
+    // ============================================================
+    // [3.0s〜] ヒーローセクションのテキスト登場
+    // ============================================================
+    // イントロのフェードアウト開始から0.5秒後にテキストアニメ開始
+    showHero(3000);
+
+    // === ヒーローテキスト表示関数 ===
+    function showHero(baseDelay) {
+      // 見出し
+      setTimeout(function() {
+        if (heroHeading) {
+          heroHeading.style.transition = 'opacity 1.2s cubic-bezier(0.16,1,0.3,1), transform 1.2s cubic-bezier(0.16,1,0.3,1)';
+          heroHeading.style.opacity = '1';
+          heroHeading.style.transform = 'translateY(0)';
+        }
+      }, baseDelay);
+
+      // サブ見出し（+0.3s）
+      setTimeout(function() {
+        if (heroSubheading) {
+          heroSubheading.style.transition = 'opacity 1.2s cubic-bezier(0.16,1,0.3,1), transform 1.2s cubic-bezier(0.16,1,0.3,1)';
+          heroSubheading.style.opacity = '1';
+          heroSubheading.style.transform = 'translateY(0)';
+        }
+      }, baseDelay + 300);
+
+      // CTAボタン（+0.6s）
+      setTimeout(function() {
+        if (heroCta) {
+          heroCta.style.transition = 'opacity 1.2s cubic-bezier(0.16,1,0.3,1), transform 1.2s cubic-bezier(0.16,1,0.3,1)';
+          heroCta.style.opacity = '1';
+          heroCta.style.transform = 'translateY(0)';
+        }
+      }, baseDelay + 600);
+
+      // スクロールインジケーター（+1.2s）
+      setTimeout(function() {
+        if (heroScroll) {
+          heroScroll.style.transition = 'opacity 1s ease';
+          heroScroll.style.opacity = '1';
+          heroScroll.style.transform = 'translateX(-50%) translateY(0)';
+        }
+      }, baseDelay + 1200);
+    }
+  });
+</script>
+
+<div class="cinematic-hero">
+  {%- liquid
+    assign video_url = section.settings.video_url
+    assign fallback_image = section.settings.fallback_image
+    assign overlay_opacity = section.settings.overlay_opacity | divided_by: 100.0
+  -%}
+
+  <!-- ★ 新規追加: イントロオーバーレイ -->
+  <div class="intro-overlay" id="introOverlay">
+    <div class="intro-grain"></div>
+    <div class="intro-vignette"></div>
+    <div class="intro-light-sweep" id="introSweep"></div>
+    <div class="intro-content">
+      <div class="intro-glow" id="introGlow"></div>
+      <img class="intro-logo" id="introLogo"
+           src="{{ 'gtm_logo_icon_trimmed_1.png' | file_url }}"
+           alt="Good Time Mall" />
+      <div class="intro-brand-name" id="introBrandName">GoodTimeMall</div>
+      <div class="intro-divider" id="introDivider"></div>
+      <div class="intro-tagline" id="introTagline">Fun time to choose clothes</div>
+    </div>
+    <div class="intro-frame-top" id="introFrameTop"></div>
+    <div class="intro-frame-bottom" id="introFrameBot"></div>
+  </div>
+
+  <!-- 既存: ヒーロー背景（動画 or 画像 + Ken Burns） -->
+  <div class="cinematic-hero__media">
+    <!-- Video Background -->
+    {%- if video_url != blank -%}
+      {%- assign is_webm = false -%}
+      {%- if video_url contains '.webm' -%}
+        {%- assign is_webm = true -%}
+      {%- endif -%}
+      
+      <video class="cinematic-hero__video" autoplay muted loop playsinline>
+        {%- if is_webm -%}
+          <source src="{{ video_url }}" type="video/webm">
+        {%- else -%}
+          <source src="{{ video_url }}" type="video/mp4">
+        {%- endif -%}
+      </video>
+
+      <!-- Mobile-only image fallback when there is video on desktop -->
+      {%- if fallback_image != blank -%}
+        <div class="cinematic-hero__fallback cinematic-hero__fallback--mobile-only" 
+             style="background-image: url('{{ fallback_image | image_url: width: 1500 }}');"
+             aria-hidden="true">
+        </div>
+      {%- endif -%}
+
+    {%- elsif fallback_image != blank -%}
+      <!-- Image Fallback with Ken Burns -->
+      <div class="cinematic-hero__fallback" 
+           style="background-image: url('{{ fallback_image | image_url: width: 3000 }}');"
+           aria-hidden="true">
+      </div>
+    {%- endif -%}
+  </div>
+
+  <!-- Overlay (Vignette) -->
+  <div class="cinematic-hero__overlay" style="opacity: {{ overlay_opacity }};"></div>
+  
+  <!-- Film Grain -->
+  <div class="cinematic-hero__grain"></div>
+
+  <!-- Content -->
+  <div class="cinematic-hero__content">
+    {%- if section.settings.heading_text != blank -%}
+      <h2 class="cinematic-hero__heading" id="heroHeading">{{ section.settings.heading_text | escape }}</h2>
+    {%- endif -%}
+    
+    {%- if section.settings.subheading_text != blank -%}
+      <p class="cinematic-hero__subheading" id="heroSubheading">{{ section.settings.subheading_text | escape }}</p>
+    {%- endif -%}
+
+    {%- if section.settings.cta_text != blank and section.settings.cta_link != blank -%}
+      <a href="{{ section.settings.cta_link }}" class="cinematic-hero__cta" id="heroCta">
+        {{ section.settings.cta_text | escape }}
+      </a>
+    {%- endif -%}
+  </div>
+
+  <!-- Scroll Indicator -->
+  {%- if section.settings.show_scroll_indicator -%}
+    <div class="cinematic-hero__scroll" id="heroScroll">
+      <svg width="20" height="30" viewBox="0 0 20 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="1" y="1" width="18" height="28" rx="9" stroke="rgba(255,255,255,0.4)" stroke-width="1"/>
+        <circle cx="10" cy="8" r="2" fill="rgba(255,255,255,0.6)">
+          <animate attributeName="cy" values="8;18;8" dur="2s" repeatCount="indefinite"/>
+        </circle>
+      </svg>
+    </div>
+  {%- endif -%}
+</div>
+
+{% schema %}
+{
+  "name": "Cinematic Hero",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "video_url",
+      "label": "Video URL",
+      "info": "URL to an MP4 or WebM video file. Hosted on Shopify Files or external CDN."
+    },
+    {
+      "type": "image_picker",
+      "id": "fallback_image",
+      "label": "Fallback Image",
+      "info": "Image shown on mobile devices (to save data) or when video URL is empty."
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "min": 0,
+      "max": 90,
+      "step": 5,
+      "default": 50,
+      "label": "Overlay Opacity (%)",
+      "info": "Darkness of the cinematic vignette effect."
+    },
+    {
+      "type": "text",
+      "id": "heading_text",
+      "default": "GOOD TIME MALL",
+      "label": "Heading"
+    },
+    {
+      "type": "text",
+      "id": "subheading_text",
+      "default": "CURATED MOTION. COLLECTIVE VISION.",
+      "label": "Subheading"
+    },
+    {
+      "type": "text",
+      "id": "cta_text",
+      "default": "EXPLORE BRANDS",
+      "label": "CTA Button Text"
+    },
+    {
+      "type": "url",
+      "id": "cta_link",
+      "label": "CTA Button Link"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_scroll_indicator",
+      "default": true,
+      "label": "Show Scroll Indicator"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Cinematic Hero",
+      "category": "Image"
+    }
+  ]
+}
+{% endschema %}
