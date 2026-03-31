@@ -14,7 +14,6 @@
       "name": "Cinematic Hero",
       "settings": {
         "video_url": "https://cdn.shopify.com/videos/c/o/v/f09401e5bb1145e4bed771972e7aad90.mp4",
-        "fallback_image": "shopify://shop_images/9022a705161ff42b7879d88f1fd6d0e8.png",
         "overlay_opacity": 50,
         "heading_text": "GOOD TIME MALL",
         "subheading_text": "CURATED MOTION. COLLECTIVE VISION.",
