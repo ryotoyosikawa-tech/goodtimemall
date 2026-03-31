@@ -50,6 +50,7 @@
           "type": "reel",
           "settings": {
             "video_url": "",
+            "cover_image": "shopify://shop_images/TikTok_vertical_format_202603311852.jpg",
             "brand_name": "BRAND NAME",
             "caption": "LOREM IPSUM DOLOR",
             "link_url": ""
