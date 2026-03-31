@@ -92,13 +92,14 @@
             "image": "shopify://shop_images/HGS_logo.jpg",
             "name": "HOME GROUND STORE",
             "description": "Streetwear rooted in comfort and self-expression.",
-            "link": "{{ shop.brand.favicon_url }}"
+            "link": ""
           }
         },
         "brand_2": {
           "type": "brand",
           "settings": {
-            "name": "HOMIES",
+            "image": "shopify://shop_images/Gemini_Generated_Image_vx99tzvx99tzvx99.png",
+            "name": "LUCE",
             "description": "Bold essentials for everyday culture.",
             "link": ""
           }
@@ -106,7 +107,8 @@
         "brand_3": {
           "type": "brand",
           "settings": {
-            "name": "imagen_ruka",
+            "image": "shopify://shop_images/Gemini_Generated_Image_816cc816cc816cc8.png",
+            "name": "brand01",
             "description": "Visual-driven fashion with a cinematic edge.",
             "link": ""
           }
