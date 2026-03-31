@@ -1,0 +1,110 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "terra_hero": {
+      "type": "brand-terra-hero",
+      "settings": {
+        "brand_name": "TERRA",
+        "sub_text": "Clothing & Textiles",
+        "year_text": "Est. 2024"
+      }
+    },
+    "terra_manifesto": {
+      "type": "brand-terra-manifesto",
+      "blocks": {
+        "value_1": {
+          "type": "value",
+          "settings": {
+            "title": "Material First",
+            "description": "すべてのコレクションは素材から始まる。美しく経年変化する天然・サステナブルなテキスタイルを厳選。"
+          }
+        },
+        "value_2": {
+          "type": "value",
+          "settings": {
+            "title": "Quiet Design",
+            "description": "ロゴなし、ノイズなし。カットとテクスチャー、プロポーションで語る服。"
+          }
+        },
+        "value_3": {
+          "type": "value",
+          "settings": {
+            "title": "Cinematic Edge",
+            "description": "映画的なアプローチでファッションを捉え、一着一着にストーリーを宿す。"
+          }
+        }
+      },
+      "block_order": [
+        "value_1",
+        "value_2",
+        "value_3"
+      ],
+      "settings": {
+        "label": "Manifesto"
+      }
+    },
+    "terra_collection": {
+      "type": "brand-terra-collection",
+      "blocks": {
+        "img_1": {
+          "type": "image",
+          "settings": {}
+        },
+        "img_2": {
+          "type": "image",
+          "settings": {}
+        },
+        "img_3": {
+          "type": "image",
+          "settings": {}
+        },
+        "img_4": {
+          "type": "image",
+          "settings": {}
+        },
+        "img_5": {
+          "type": "image",
+          "settings": {}
+        }
+      },
+      "block_order": [
+        "img_1",
+        "img_2",
+        "img_3",
+        "img_4",
+        "img_5"
+      ],
+      "settings": {
+        "label": "Collection — FW25"
+      }
+    },
+    "terra_products": {
+      "type": "brand-terra-products",
+      "settings": {
+        "products_to_show": 8
+      }
+    },
+    "terra_cta": {
+      "type": "brand-terra-cta",
+      "settings": {
+        "heading": "Discover TERRA",
+        "button_text": "View Collection"
+      }
+    }
+  },
+  "order": [
+    "terra_hero",
+    "terra_manifesto",
+    "terra_collection",
+    "terra_products",
+    "terra_cta"
+  ]
+}

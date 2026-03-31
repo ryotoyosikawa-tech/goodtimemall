@@ -101,16 +101,16 @@
             "image": "shopify://shop_images/Gemini_Generated_Image_vx99tzvx99tzvx99.png",
             "name": "LUCE",
             "description": "Bold essentials for everyday culture.",
-            "link": ""
+            "link": "shopify://collections/luce"
           }
         },
         "brand_3": {
           "type": "brand",
           "settings": {
             "image": "shopify://shop_images/Gemini_Generated_Image_816cc816cc816cc8.png",
-            "name": "brand01",
+            "name": "TERRA",
             "description": "Visual-driven fashion with a cinematic edge.",
-            "link": ""
+            "link": "shopify://collections/terra"
           }
         }
       },
