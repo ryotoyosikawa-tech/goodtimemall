@@ -89,6 +89,7 @@
         "brand_1": {
           "type": "brand",
           "settings": {
+            "image": "shopify://shop_images/HGS_GO_image.jpg",
             "name": "HOME GROUND STORE",
             "description": "Streetwear rooted in comfort and self-expression.",
             "link": ""
