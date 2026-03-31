@@ -5,18 +5,32 @@
                 padding-bottom: {{ section.settings.padding_bottom }}px;">
   <div class="featured-brands__inner">
 
-    {%- comment -%} Section Header {%- endcomment -%}
+    {%- comment -%} Section Header + Nav Arrows {%- endcomment -%}
     <div class="featured-brands__header">
-      {%- if section.settings.heading != blank -%}
-        <h2 class="featured-brands__heading">{{ section.settings.heading | escape }}</h2>
-      {%- endif -%}
-      {%- if section.settings.subheading != blank -%}
-        <p class="featured-brands__subheading">{{ section.settings.subheading | escape }}</p>
-      {%- endif -%}
+      <div class="featured-brands__header-text">
+        {%- if section.settings.heading != blank -%}
+          <h2 class="featured-brands__heading">{{ section.settings.heading | escape }}</h2>
+        {%- endif -%}
+        {%- if section.settings.subheading != blank -%}
+          <p class="featured-brands__subheading">{{ section.settings.subheading | escape }}</p>
+        {%- endif -%}
+      </div>
+      <div class="featured-brands__nav">
+        <button class="featured-brands__nav-btn featured-brands__nav-prev" aria-label="Previous">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <path d="M13 4L7 10L13 16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </button>
+        <button class="featured-brands__nav-btn featured-brands__nav-next" aria-label="Next">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <path d="M7 4L13 10L7 16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </div>
     </div>
 
-    {%- comment -%} Brand Cards Grid {%- endcomment -%}
-    <div class="featured-brands__grid">
+    {%- comment -%} Brand Cards Slider {%- endcomment -%}
+    <div class="featured-brands__slider" id="brandsSlider-{{ section.id }}">
       {%- for block in section.blocks -%}
         <a href="{{ block.settings.link | default: '#' }}"
            class="featured-brands__card"
@@ -62,37 +76,52 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-  var cards = document.querySelectorAll('#shopify-section-{{ section.id }} .featured-brands__card');
+  var section = document.getElementById('shopify-section-{{ section.id }}');
+  if (!section) return;
+
+  var slider = document.getElementById('brandsSlider-{{ section.id }}');
+  var cards = slider.querySelectorAll('.featured-brands__card');
   if (cards.length === 0) return;
 
+  // --- Scroll reveal animation ---
   var prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (prefersReducedMotion) {
     cards.forEach(function(card) { card.classList.add('is-visible'); });
-    return;
+  } else {
+    var appearObserver = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          var card = entry.target;
+          var index = Array.from(cards).indexOf(card);
+          var delay = Math.min(index * 150, 600);
+          setTimeout(function() { card.classList.add('is-visible'); }, delay);
+          appearObserver.unobserve(card);
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+    cards.forEach(function(card) { appearObserver.observe(card); });
   }
 
-  var observer = new IntersectionObserver(function(entries) {
-    entries.forEach(function(entry) {
-      if (entry.isIntersecting) {
-        var card = entry.target;
-        var index = Array.from(cards).indexOf(card);
-        var delay = Math.min(index * 150, 450);
+  // --- Navigation arrows ---
+  var prevBtn = section.querySelector('.featured-brands__nav-prev');
+  var nextBtn = section.querySelector('.featured-brands__nav-next');
 
-        setTimeout(function() {
-          card.classList.add('is-visible');
-        }, delay);
+  if (prevBtn && nextBtn) {
+    var getScrollAmount = function() {
+      var firstCard = slider.querySelector('.featured-brands__card');
+      if (!firstCard) return 300;
+      return firstCard.offsetWidth + 24;
+    };
 
-        observer.unobserve(card);
-      }
+    nextBtn.addEventListener('click', function() {
+      slider.scrollBy({ left: getScrollAmount(), behavior: 'smooth' });
     });
-  }, {
-    threshold: 0.1,
-    rootMargin: '0px 0px -50px 0px'
-  });
 
-  cards.forEach(function(card) {
-    observer.observe(card);
-  });
+    prevBtn.addEventListener('click', function() {
+      slider.scrollBy({ left: -getScrollAmount(), behavior: 'smooth' });
+    });
+  }
 });
 </script>
 
@@ -101,6 +130,7 @@ document.addEventListener('DOMContentLoaded', function() {
   "name": "Featured Brands",
   "tag": "section",
   "class": "section",
+  "max_blocks": 12,
   "settings": [
     {
       "type": "text",
