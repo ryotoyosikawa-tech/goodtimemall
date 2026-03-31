@@ -9,6 +9,77 @@
  */
 {
   "sections": {
+    "cinematic_hero_pki6KP": {
+      "type": "cinematic-hero",
+      "name": "Cinematic Hero",
+      "settings": {
+        "video_url": "",
+        "fallback_image": "shopify://shop_images/9022a705161ff42b7879d88f1fd6d0e8.png",
+        "overlay_opacity": 50,
+        "heading_text": "GOOD TIME MALL",
+        "subheading_text": "CURATED MOTION. COLLECTIVE VISION.",
+        "cta_text": "EXPLORE BRANDS",
+        "cta_link": "",
+        "show_scroll_indicator": true
+      }
+    },
+    "trending_reels_GRhaeQ": {
+      "type": "trending-reels",
+      "blocks": {
+        "reel_fFRieM": {
+          "type": "reel",
+          "settings": {
+            "video_url": "",
+            "brand_name": "BRAND NAME",
+            "caption": "LOREM IPSUM DOLOR",
+            "link_url": ""
+          }
+        },
+        "reel_iQEGmM": {
+          "type": "reel",
+          "settings": {
+            "video_url": "",
+            "brand_name": "BRAND NAME",
+            "caption": "LOREM IPSUM DOLOR",
+            "link_url": ""
+          }
+        },
+        "reel_fRbWJc": {
+          "type": "reel",
+          "settings": {
+            "video_url": "",
+            "brand_name": "BRAND NAME",
+            "caption": "LOREM IPSUM DOLOR",
+            "link_url": ""
+          }
+        },
+        "reel_hGwBT6": {
+          "type": "reel",
+          "settings": {
+            "video_url": "",
+            "brand_name": "BRAND NAME",
+            "caption": "LOREM IPSUM DOLOR",
+            "link_url": ""
+          }
+        }
+      },
+      "block_order": [
+        "reel_fFRieM",
+        "reel_iQEGmM",
+        "reel_fRbWJc",
+        "reel_hGwBT6"
+      ],
+      "name": "Trending Reels",
+      "settings": {
+        "section_heading": "TRENDING REELS",
+        "section_subheading": "What's moving right now",
+        "card_ratio": "9:16",
+        "autoplay_on_hover": true,
+        "autoplay_on_visible": true,
+        "section_padding_top": 80,
+        "section_padding_bottom": 80
+      }
+    },
     "slideshow_KchgBC": {
       "type": "slideshow",
       "blocks": {
@@ -213,76 +284,6 @@
         "swipe_on_mobile": false,
         "padding_top": 0,
         "padding_bottom": 0
-      }
-    },
-    "cinematic_hero_pki6KP": {
-      "type": "cinematic-hero",
-      "name": "Cinematic Hero",
-      "settings": {
-        "video_url": "",
-        "overlay_opacity": 50,
-        "heading_text": "GOOD TIME MALL",
-        "subheading_text": "CURATED MOTION. COLLECTIVE VISION.",
-        "cta_text": "EXPLORE BRANDS",
-        "cta_link": "",
-        "show_scroll_indicator": true
-      }
-    },
-    "trending_reels_GRhaeQ": {
-      "type": "trending-reels",
-      "blocks": {
-        "reel_fFRieM": {
-          "type": "reel",
-          "settings": {
-            "video_url": "",
-            "brand_name": "BRAND NAME",
-            "caption": "LOREM IPSUM DOLOR",
-            "link_url": ""
-          }
-        },
-        "reel_iQEGmM": {
-          "type": "reel",
-          "settings": {
-            "video_url": "",
-            "brand_name": "BRAND NAME",
-            "caption": "LOREM IPSUM DOLOR",
-            "link_url": ""
-          }
-        },
-        "reel_fRbWJc": {
-          "type": "reel",
-          "settings": {
-            "video_url": "",
-            "brand_name": "BRAND NAME",
-            "caption": "LOREM IPSUM DOLOR",
-            "link_url": ""
-          }
-        },
-        "reel_hGwBT6": {
-          "type": "reel",
-          "settings": {
-            "video_url": "",
-            "brand_name": "BRAND NAME",
-            "caption": "LOREM IPSUM DOLOR",
-            "link_url": ""
-          }
-        }
-      },
-      "block_order": [
-        "reel_fFRieM",
-        "reel_iQEGmM",
-        "reel_fRbWJc",
-        "reel_hGwBT6"
-      ],
-      "name": "Trending Reels",
-      "settings": {
-        "section_heading": "TRENDING REELS",
-        "section_subheading": "What's moving right now",
-        "card_ratio": "9:16",
-        "autoplay_on_hover": true,
-        "autoplay_on_visible": true,
-        "section_padding_top": 80,
-        "section_padding_bottom": 80
       }
     }
   },
