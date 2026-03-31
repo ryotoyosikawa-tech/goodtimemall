@@ -145,6 +145,7 @@
     "mall_concept_section": {
       "type": "mall-concept",
       "settings": {
+        "image": "shopify://shop_images/Gemini_Generated_Image_xl0qw4xl0qw4xl0q.png",
         "image_alt": "",
         "label": "OUR CONCEPT",
         "heading": "A MALL FOR GOOD TIMES",
