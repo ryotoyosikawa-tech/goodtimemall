@@ -1,0 +1,86 @@
+<section class="brand-hgs hgs-lookbook" id="hgsLookbook-{{ section.id }}">
+  <div class="hgs-lookbook__header">
+    <div class="hgs-section-label">{{ section.settings.label | default: 'Lookbook' | escape }}</div>
+    <div class="hgs-section-label">{{ section.settings.season | default: 'SS26' | escape }}</div>
+  </div>
+  <div class="hgs-lookbook__grid">
+    {%- for block in section.blocks -%}
+      <div class="hgs-look" {{ block.shopify_attributes }}>
+        {%- if block.settings.image != blank -%}
+          <img src="{{ block.settings.image | image_url: width: 1200 }}"
+               alt="Look {{ forloop.index | prepend: '0' | slice: -2, 2 }}"
+               loading="lazy"
+               width="1200"
+               height="800" />
+        {%- else -%}
+          <div class="hgs-look__placeholder">Look {{ forloop.index | prepend: '0' | slice: -2, 2 }}</div>
+        {%- endif -%}
+        <div class="hgs-look__label">{{ forloop.index | prepend: '0' | slice: -2, 2 }}</div>
+      </div>
+    {%- endfor -%}
+  </div>
+</section>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  var el = document.getElementById('hgsLookbook-{{ section.id }}');
+  if (!el) return;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    el.classList.add('is-visible'); return;
+  }
+  new IntersectionObserver(function(entries, obs) {
+    entries.forEach(function(e) {
+      if (e.isIntersecting) { e.target.classList.add('is-visible'); obs.unobserve(e.target); }
+    });
+  }, { threshold: 0.1 }).observe(el);
+});
+</script>
+
+{% schema %}
+{
+  "name": "HGS Lookbook",
+  "tag": "div",
+  "class": "brand-hgs-section",
+  "max_blocks": 6,
+  "settings": [
+    {
+      "type": "text",
+      "id": "label",
+      "label": "Section label",
+      "default": "Lookbook"
+    },
+    {
+      "type": "text",
+      "id": "season",
+      "label": "Season label",
+      "default": "SS26"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "look",
+      "name": "Look",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "HGS Lookbook",
+      "blocks": [
+        { "type": "look" },
+        { "type": "look" },
+        { "type": "look" },
+        { "type": "look" },
+        { "type": "look" },
+        { "type": "look" }
+      ]
+    }
+  ]
+}
+{% endschema %}
