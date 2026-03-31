@@ -206,12 +206,9 @@
     margin-top: 2rem;
   }
 
-  /* モバイルでは動画を非表示にし、画像 + Ken Burns に切り替える（データ通信量削減） */
-  .cinematic-hero__video {
-    display: none;
-  }
+  /* モバイルでも動画を表示（フォールバック画像は非表示） */
   .cinematic-hero__fallback--mobile-only {
-    display: block;
+    display: none;
   }
 }
 

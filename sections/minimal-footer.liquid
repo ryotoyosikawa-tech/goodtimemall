@@ -79,6 +79,20 @@
       </div>
     {%- endif -%}
 
+    {%- comment -%} Brand Partner CTA {%- endcomment -%}
+    {%- if section.settings.show_partner_cta -%}
+      <div class="minimal-footer__divider" aria-hidden="true" style="margin-top: 8px;"></div>
+      <div class="minimal-footer__partner">
+        <p class="minimal-footer__partner-label">{{ section.settings.partner_label | escape }}</p>
+        <a href="{{ section.settings.partner_link }}" class="minimal-footer__partner-btn">
+          {{ section.settings.partner_btn_text | escape }}
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+            <path d="M5 2.5L9.5 7L5 11.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+      </div>
+    {%- endif -%}
+
     {%- comment -%} Copyright {%- endcomment -%}
     <p class="minimal-footer__copyright">
       &copy; {{ 'now' | date: '%Y' }} {{ shop.name | escape }}. All rights reserved.
