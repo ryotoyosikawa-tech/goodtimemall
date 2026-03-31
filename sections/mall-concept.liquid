@@ -1,0 +1,129 @@
+{{ 'mall-concept.css' | asset_url | stylesheet_tag }}
+
+<section class="mall-concept">
+  <div class="mall-concept__grain" aria-hidden="true"></div>
+
+  <div class="mall-concept__inner">
+    {%- comment -%} Image {%- endcomment -%}
+    <div class="mall-concept__media">
+      {%- if section.settings.image != blank -%}
+        <img class="mall-concept__image"
+             src="{{ section.settings.image | image_url: width: 1200 }}"
+             alt="{{ section.settings.image_alt | default: section.settings.heading | escape }}"
+             loading="lazy"
+             width="1200"
+             height="800" />
+      {%- else -%}
+        <div class="mall-concept__placeholder">CONCEPT</div>
+      {%- endif -%}
+    </div>
+
+    {%- comment -%} Content {%- endcomment -%}
+    <div class="mall-concept__content">
+      <div class="mall-concept__line" data-animate></div>
+
+      {%- if section.settings.label != blank -%}
+        <p class="mall-concept__label" data-animate>{{ section.settings.label | escape }}</p>
+      {%- endif -%}
+
+      {%- if section.settings.heading != blank -%}
+        <h2 class="mall-concept__heading" data-animate>{{ section.settings.heading | escape }}</h2>
+      {%- endif -%}
+
+      {%- if section.settings.body != blank -%}
+        <p class="mall-concept__body" data-animate>{{ section.settings.body | escape }}</p>
+      {%- endif -%}
+
+      {%- if section.settings.cta_text != blank and section.settings.cta_link != blank -%}
+        <a href="{{ section.settings.cta_link }}" class="mall-concept__cta" data-animate>
+          {{ section.settings.cta_text | escape }}
+        </a>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  var section = document.querySelector('#shopify-section-{{ section.id }}');
+  if (!section) return;
+  var elements = section.querySelectorAll('[data-animate]');
+  if (elements.length === 0) return;
+
+  var prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (prefersReducedMotion) {
+    elements.forEach(function(el) { el.classList.add('is-visible'); });
+    return;
+  }
+
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        var els = entry.target.querySelectorAll('[data-animate]');
+        els.forEach(function(el, i) {
+          setTimeout(function() {
+            el.classList.add('is-visible');
+          }, i * 150);
+        });
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.2 });
+
+  observer.observe(section.querySelector('.mall-concept__content'));
+});
+</script>
+
+{% schema %}
+{
+  "name": "Mall Concept",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Concept Image"
+    },
+    {
+      "type": "text",
+      "id": "image_alt",
+      "label": "Image alt text"
+    },
+    {
+      "type": "text",
+      "id": "label",
+      "label": "Label",
+      "default": "OUR CONCEPT"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "A MALL FOR\nGOOD TIMES"
+    },
+    {
+      "type": "textarea",
+      "id": "body",
+      "label": "Body text",
+      "default": "Good Time Mall is a curated space where independent brands come together. Each brand brings its own story, style, and vision — united by the shared belief that fashion should be fun, expressive, and accessible."
+    },
+    {
+      "type": "text",
+      "id": "cta_text",
+      "label": "Button text",
+      "default": "LEARN MORE"
+    },
+    {
+      "type": "url",
+      "id": "cta_link",
+      "label": "Button link"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Mall Concept"
+    }
+  ]
+}
+{% endschema %}
