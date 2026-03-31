@@ -223,3 +223,98 @@ hr,
   background: #000000 !important;
   color: #FFFFFF !important;
 }
+
+/* ========================================
+   ★ ヘッダー改修: 透過 → Warm Ivory 固定
+   ======================================== */
+
+/* ヘッダー基本: 固定位置 + トランジション */
+.header-wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+  transition: background-color 0.3s ease,
+              backdrop-filter 0.3s ease,
+              border-color 0.3s ease;
+}
+
+/* ヒーロー上では透過（JSで .header--transparent を付与） */
+.header-wrapper.header--transparent {
+  background: transparent !important;
+  border-bottom: none !important;
+  backdrop-filter: none;
+}
+
+.header-wrapper.header--transparent .header a,
+.header-wrapper.header--transparent .header button,
+.header-wrapper.header--transparent .header__heading-link,
+.header-wrapper.header--transparent .header__icon {
+  color: #FFFFFF;
+}
+
+/* スクロール後: Warm Ivory 半透明 + ブラー */
+.header-wrapper:not(.header--transparent) {
+  background-color: rgba(250, 250, 248, 0.95) !important;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 0.5px solid #E8E6E1 !important;
+}
+
+/* ヘッダーの高さ分だけボディにオフセットを設定 */
+body {
+  padding-top: 0; /* ヒーローセクションがフルスクリーンなのでオフセット不要（ヘッダーが透過で重なる） */
+}
+
+/* ヒーロー以外のページではヘッダー分のパディング */
+.template-collection body,
+.template-product body,
+.template-page body,
+.template-blog body,
+.template-article body,
+.template-cart body,
+.template-search body {
+  padding-top: 64px;
+}
+
+/* --- ハンバーガーメニュー整理 --- */
+
+/* モバイルハンバーガー: ミニマルな線 */
+.header__icon--menu .icon-hamburger line,
+.header__icon--menu svg line {
+  stroke-width: 1.2;
+}
+
+/* メニュードロワー: Warm Ivory */
+.menu-drawer {
+  background-color: #FAFAF8;
+  border-right: 0.5px solid #E8E6E1;
+}
+
+.menu-drawer__menu-item {
+  font-size: 14px;
+  font-weight: 400;
+  letter-spacing: 0.05em;
+  color: #1A1A1A;
+  padding: 12px 0;
+  border-bottom: 0.5px solid #E8E6E1;
+}
+
+.menu-drawer__menu-item:hover {
+  color: #6B6963;
+}
+
+/* ドロワー内のクローズボタン */
+.menu-drawer__close-button {
+  color: #1A1A1A;
+}
+
+/* --- カートアイコンバブル --- */
+.cart-count-bubble {
+  background-color: #1A1A1A;
+  color: #FAFAF8;
+  font-size: 10px;
+  min-width: 18px;
+  height: 18px;
+}
