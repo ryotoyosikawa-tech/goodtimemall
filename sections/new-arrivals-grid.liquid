@@ -1,0 +1,249 @@
+{{ 'new-arrivals-grid.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign collection = collections[section.settings.collection]
+  assign products_to_show = section.settings.products_to_show
+  assign show_vendor = section.settings.show_vendor
+  assign show_secondary_image = section.settings.show_secondary_image
+  assign show_badge = section.settings.show_badge
+-%}
+
+<section class="new-arrivals"
+         style="padding-top: {{ section.settings.padding_top }}px;
+                padding-bottom: {{ section.settings.padding_bottom }}px;">
+  <div class="new-arrivals__inner">
+
+    {%- comment -%} Section Header {%- endcomment -%}
+    <div class="new-arrivals__header">
+      {%- if section.settings.heading != blank -%}
+        <h2 class="new-arrivals__heading">{{ section.settings.heading | escape }}</h2>
+      {%- endif -%}
+      {%- if section.settings.subheading != blank -%}
+        <p class="new-arrivals__subheading">{{ section.settings.subheading | escape }}</p>
+      {%- endif -%}
+    </div>
+
+    {%- comment -%} Product Grid {%- endcomment -%}
+    <div class="new-arrivals__grid">
+      {%- if collection != blank and collection.products.size > 0 -%}
+        {%- for product in collection.products limit: products_to_show -%}
+          <a href="{{ product.url }}"
+             class="new-arrivals__card"
+             aria-label="{{ product.title | escape }}">
+
+            {%- comment -%} Image {%- endcomment -%}
+            <div class="new-arrivals__image-wrapper">
+              {%- if product.featured_image != blank -%}
+                <img class="new-arrivals__image"
+                     src="{{ product.featured_image | image_url: width: 600 }}"
+                     alt="{{ product.featured_image.alt | default: product.title | escape }}"
+                     loading="lazy"
+                     width="600"
+                     height="800" />
+
+                {%- if show_secondary_image and product.images.size > 1 -%}
+                  <img class="new-arrivals__image new-arrivals__image--secondary"
+                       src="{{ product.images[1] | image_url: width: 600 }}"
+                       alt="{{ product.images[1].alt | default: product.title | escape }}"
+                       loading="lazy"
+                       width="600"
+                       height="800" />
+                {%- endif -%}
+              {%- else -%}
+                <div class="new-arrivals__placeholder">
+                  <span>+</span>
+                </div>
+              {%- endif -%}
+
+              {%- comment -%} Badges {%- endcomment -%}
+              {%- if show_badge -%}
+                {%- if product.compare_at_price > product.price -%}
+                  <span class="new-arrivals__badge new-arrivals__badge--sale">Sale</span>
+                {%- elsif product.available and product.published_at -%}
+                  {%- assign now_timestamp = 'now' | date: '%s' | plus: 0 -%}
+                  {%- assign published_timestamp = product.published_at | date: '%s' | plus: 0 -%}
+                  {%- assign diff_seconds = now_timestamp | minus: published_timestamp -%}
+                  {%- comment -%} Show NEW badge if published within 30 days (2592000 seconds) {%- endcomment -%}
+                  {%- if diff_seconds < 2592000 -%}
+                    <span class="new-arrivals__badge new-arrivals__badge--new">New</span>
+                  {%- endif -%}
+                {%- endif -%}
+              {%- endif -%}
+            </div>
+
+            {%- comment -%} Product Info {%- endcomment -%}
+            <div class="new-arrivals__info">
+              {%- if show_vendor and product.vendor != blank -%}
+                <span class="new-arrivals__vendor">{{ product.vendor | escape }}</span>
+              {%- endif -%}
+
+              <span class="new-arrivals__name">{{ product.title | escape }}</span>
+
+              <div class="new-arrivals__price">
+                {%- if product.compare_at_price > product.price -%}
+                  <span class="new-arrivals__price--compare">{{ product.compare_at_price | money }}</span>
+                  <span class="new-arrivals__price--sale">{{ product.price | money }}</span>
+                {%- else -%}
+                  <span>{{ product.price | money }}</span>
+                {%- endif -%}
+              </div>
+            </div>
+          </a>
+        {%- endfor -%}
+
+      {%- else -%}
+        {%- comment -%} Placeholder cards when no collection is selected {%- endcomment -%}
+        {%- for i in (1..products_to_show) -%}
+          <div class="new-arrivals__card">
+            <div class="new-arrivals__image-wrapper">
+              <div class="new-arrivals__placeholder">
+                <span>{{ i }}</span>
+              </div>
+            </div>
+            <div class="new-arrivals__info">
+              <span class="new-arrivals__name">Sample Product {{ i }}</span>
+              <div class="new-arrivals__price">
+                <span>¥0</span>
+              </div>
+            </div>
+          </div>
+        {%- endfor -%}
+      {%- endif -%}
+    </div>
+
+    {%- comment -%} View All Button {%- endcomment -%}
+    {%- if section.settings.show_view_all and collection != blank -%}
+      <div class="new-arrivals__footer">
+        <a href="{{ collection.url }}" class="new-arrivals__view-all">
+          {{ section.settings.view_all_text | default: 'View All' | escape }}
+        </a>
+      </div>
+    {%- endif -%}
+
+  </div>
+</section>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  var cards = document.querySelectorAll('#shopify-section-{{ section.id }} .new-arrivals__card');
+  if (cards.length === 0) return;
+
+  var prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (prefersReducedMotion) {
+    cards.forEach(function(card) { card.classList.add('is-visible'); });
+    return;
+  }
+
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        var card = entry.target;
+        var index = Array.from(cards).indexOf(card);
+        var delay = Math.min(index * 100, 600);
+
+        setTimeout(function() {
+          card.classList.add('is-visible');
+        }, delay);
+
+        observer.unobserve(card);
+      }
+    });
+  }, {
+    threshold: 0.1,
+    rootMargin: '0px 0px -50px 0px'
+  });
+
+  cards.forEach(function(card) {
+    observer.observe(card);
+  });
+});
+</script>
+
+{% schema %}
+{
+  "name": "New Arrivals Grid",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "NEW ARRIVALS"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "The latest drops from our brands"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection"
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "label": "Products to show",
+      "min": 4,
+      "max": 16,
+      "step": 1,
+      "default": 8
+    },
+    {
+      "type": "checkbox",
+      "id": "show_secondary_image",
+      "label": "Show secondary image on hover",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_vendor",
+      "label": "Show brand name",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_badge",
+      "label": "Show NEW / SALE badge",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_view_all",
+      "label": "Show 'View All' button",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "view_all_text",
+      "label": "View All button text",
+      "default": "VIEW ALL"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding top (px)",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding bottom (px)",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "default": 80
+    }
+  ],
+  "presets": [
+    {
+      "name": "New Arrivals Grid"
+    }
+  ]
+}
+{% endschema %}
