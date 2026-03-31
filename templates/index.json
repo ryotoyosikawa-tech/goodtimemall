@@ -107,7 +107,8 @@
         "brand_3": {
           "type": "brand",
           "settings": {
-            "name": "brand02",
+            "image": "shopify://shop_images/Gemini_Generated_Image_816cc816cc816cc8.png",
+            "name": "brand02 test",
             "description": "Visual-driven fashion with a cinematic edge.",
             "link": ""
           }
