@@ -1,0 +1,80 @@
+{{ 'brand-luce.css' | asset_url | stylesheet_tag }}
+
+<section class="brand-luce luce-hero" id="luceHero-{{ section.id }}">
+  <div class="luce-hero__left">
+    <div class="luce-label">{{ section.settings.label | default: 'Good Time Mall — Featured Brand' | escape }}</div>
+    <h1 class="luce-hero__logo">
+      {{ section.settings.logo_text | default: 'LUCE' | escape }}
+      <small>{{ section.settings.sub_text | default: 'Apparel' | escape }}</small>
+    </h1>
+    {%- if section.settings.tagline != blank -%}
+      <p class="luce-hero__tagline">"{{ section.settings.tagline | escape }}"</p>
+    {%- endif -%}
+  </div>
+  <div class="luce-hero__right">
+    {%- if section.settings.image != blank -%}
+      <img src="{{ section.settings.image | image_url: width: 1200 }}"
+           alt="{{ section.settings.logo_text | default: 'LUCE' | escape }}"
+           loading="eager"
+           width="1200"
+           height="1600" />
+    {%- else -%}
+      <div class="luce-hero__placeholder">Hero Visual</div>
+    {%- endif -%}
+  </div>
+</section>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  var hero = document.getElementById('luceHero-{{ section.id }}');
+  if (!hero) return;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    hero.classList.add('is-visible'); return;
+  }
+  setTimeout(function() { hero.classList.add('is-visible'); }, 200);
+});
+</script>
+
+{% schema %}
+{
+  "name": "LUCE Hero",
+  "tag": "div",
+  "class": "brand-luce-section",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Hero Image"
+    },
+    {
+      "type": "text",
+      "id": "label",
+      "label": "Label text",
+      "default": "Good Time Mall — Featured Brand"
+    },
+    {
+      "type": "text",
+      "id": "logo_text",
+      "label": "Logo text",
+      "default": "LUCE"
+    },
+    {
+      "type": "text",
+      "id": "sub_text",
+      "label": "Sub text",
+      "default": "Apparel"
+    },
+    {
+      "type": "text",
+      "id": "tagline",
+      "label": "Tagline",
+      "default": "Bold essentials for everyday culture."
+    }
+  ],
+  "presets": [
+    {
+      "name": "LUCE Hero"
+    }
+  ]
+}
+{% endschema %}
