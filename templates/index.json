@@ -98,7 +98,8 @@
         "brand_2": {
           "type": "brand",
           "settings": {
-            "name": "brand01",
+            "image": "shopify://shop_images/Gemini_Generated_Image_vx99tzvx99tzvx99.png",
+            "name": "LUCE",
             "description": "Bold essentials for everyday culture.",
             "link": ""
           }
