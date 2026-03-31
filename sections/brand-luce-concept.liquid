@@ -1,0 +1,48 @@
+<section class="brand-luce luce-concept" id="luceConcept-{{ section.id }}">
+  <div class="luce-section-label">{{ section.settings.label | default: 'About the Brand' | escape }}</div>
+  <div class="luce-concept__text">
+    {{ section.settings.body }}
+  </div>
+</section>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  var el = document.getElementById('luceConcept-{{ section.id }}');
+  if (!el) return;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    el.classList.add('is-visible'); return;
+  }
+  new IntersectionObserver(function(entries, obs) {
+    entries.forEach(function(e) {
+      if (e.isIntersecting) { e.target.classList.add('is-visible'); obs.unobserve(e.target); }
+    });
+  }, { threshold: 0.15 }).observe(el);
+});
+</script>
+
+{% schema %}
+{
+  "name": "LUCE Concept",
+  "tag": "div",
+  "class": "brand-luce-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "label",
+      "label": "Section label",
+      "default": "About the Brand"
+    },
+    {
+      "type": "richtext",
+      "id": "body",
+      "label": "Body text",
+      "default": "<p>LUCEは<em>シンプル</em>と<em>ステートメント</em>の境界を探求するブランド。ワードローブの定番になるように設計しつつも、一着で存在感を放つアイテムを展開。都市建築や日常のリズムからインスピレーションを得たコレクションです。</p>"
+    }
+  ],
+  "presets": [
+    {
+      "name": "LUCE Concept"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,47 @@
+<section class="brand-luce luce-products">
+  <div class="luce-products__header">
+    <div class="luce-section-label">Shop LUCE</div>
+    <a href="{{ collection.url }}" class="luce-view-all">View All &rarr;</a>
+  </div>
+  <div class="luce-products__scroll">
+    {%- for product in collection.products limit: section.settings.products_to_show -%}
+      <a href="{{ product.url }}" class="luce-product-card">
+        <div class="luce-product-card__img">
+          {%- if product.featured_image != blank -%}
+            <img src="{{ product.featured_image | image_url: width: 600 }}"
+                 alt="{{ product.title | escape }}"
+                 loading="lazy"
+                 width="600"
+                 height="800" />
+          {%- endif -%}
+        </div>
+        <div class="luce-product-card__name">{{ product.title }}</div>
+        <div class="luce-product-card__price">{{ product.price | money }}</div>
+      </a>
+    {%- endfor -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "LUCE Products",
+  "tag": "div",
+  "class": "brand-luce-section",
+  "settings": [
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "label": "Products to show",
+      "min": 4,
+      "max": 12,
+      "step": 1,
+      "default": 12
+    }
+  ],
+  "presets": [
+    {
+      "name": "LUCE Products"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,83 @@
+<section class="brand-luce luce-lookbook" id="luceLookbook-{{ section.id }}">
+  <div class="luce-lookbook__header">
+    <div class="luce-section-label">{{ section.settings.label | default: 'Lookbook' | escape }}</div>
+    <div class="luce-lookbook__season">{{ section.settings.season | default: 'SS26 Collection' | escape }}</div>
+  </div>
+  <div class="luce-lookbook__grid">
+    {%- for block in section.blocks -%}
+      <div class="luce-look" {{ block.shopify_attributes }}>
+        {%- if block.settings.image != blank -%}
+          <img src="{{ block.settings.image | image_url: width: 1200 }}"
+               alt="Look {{ forloop.index | prepend: '0' | slice: -2, 2 }}"
+               loading="lazy"
+               width="1200"
+               height="800" />
+        {%- else -%}
+          <div class="luce-look__placeholder">Look {{ forloop.index | prepend: '0' | slice: -2, 2 }}</div>
+        {%- endif -%}
+      </div>
+    {%- endfor -%}
+  </div>
+</section>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  var el = document.getElementById('luceLookbook-{{ section.id }}');
+  if (!el) return;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    el.classList.add('is-visible'); return;
+  }
+  new IntersectionObserver(function(entries, obs) {
+    entries.forEach(function(e) {
+      if (e.isIntersecting) { e.target.classList.add('is-visible'); obs.unobserve(e.target); }
+    });
+  }, { threshold: 0.1 }).observe(el);
+});
+</script>
+
+{% schema %}
+{
+  "name": "LUCE Lookbook",
+  "tag": "div",
+  "class": "brand-luce-section",
+  "max_blocks": 4,
+  "settings": [
+    {
+      "type": "text",
+      "id": "label",
+      "label": "Section label",
+      "default": "Lookbook"
+    },
+    {
+      "type": "text",
+      "id": "season",
+      "label": "Season label",
+      "default": "SS26 Collection"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "look",
+      "name": "Look",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "LUCE Lookbook",
+      "blocks": [
+        { "type": "look" },
+        { "type": "look" },
+        { "type": "look" },
+        { "type": "look" }
+      ]
+    }
+  ]
+}
+{% endschema %}

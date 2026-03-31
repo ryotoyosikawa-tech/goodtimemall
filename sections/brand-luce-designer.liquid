@@ -1,0 +1,67 @@
+<section class="brand-luce luce-designer" id="luceDesigner-{{ section.id }}">
+  <div class="luce-designer__img">
+    {%- if section.settings.image != blank -%}
+      <img src="{{ section.settings.image | image_url: width: 800 }}"
+           alt="Designer"
+           loading="lazy"
+           width="800"
+           height="1067" />
+    {%- else -%}
+      <div class="luce-designer__placeholder">Designer Portrait</div>
+    {%- endif -%}
+  </div>
+  <div>
+    <div class="luce-section-label">From the Designer</div>
+    <p class="luce-designer__quote">
+      {{ section.settings.quote | escape }}
+    </p>
+    <div class="luce-designer__attr">{{ section.settings.attribution | escape }}</div>
+  </div>
+</section>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  var el = document.getElementById('luceDesigner-{{ section.id }}');
+  if (!el) return;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    el.classList.add('is-visible'); return;
+  }
+  new IntersectionObserver(function(entries, obs) {
+    entries.forEach(function(e) {
+      if (e.isIntersecting) { e.target.classList.add('is-visible'); obs.unobserve(e.target); }
+    });
+  }, { threshold: 0.15 }).observe(el);
+});
+</script>
+
+{% schema %}
+{
+  "name": "LUCE Designer",
+  "tag": "div",
+  "class": "brand-luce-section",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Designer photo"
+    },
+    {
+      "type": "textarea",
+      "id": "quote",
+      "label": "Quote",
+      "default": "セカンドスキンのような服を作りたかった。考えずに手に取れるのに、着る瞬間に自分を洗練させるような感覚を目指しています。"
+    },
+    {
+      "type": "text",
+      "id": "attribution",
+      "label": "Attribution",
+      "default": "— Creative Director, LUCE"
+    }
+  ],
+  "presets": [
+    {
+      "name": "LUCE Designer"
+    }
+  ]
+}
+{% endschema %}
