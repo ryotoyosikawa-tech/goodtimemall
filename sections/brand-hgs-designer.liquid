@@ -1,0 +1,67 @@
+<section class="brand-hgs hgs-designer" id="hgsDesigner-{{ section.id }}">
+  <div class="hgs-designer__img">
+    {%- if section.settings.image != blank -%}
+      <img src="{{ section.settings.image | image_url: width: 800 }}"
+           alt="Designer"
+           loading="lazy"
+           width="800"
+           height="800" />
+    {%- else -%}
+      <div class="hgs-designer__placeholder">Designer Photo</div>
+    {%- endif -%}
+  </div>
+  <div>
+    <div class="hgs-section-label">From the Founder</div>
+    <div class="hgs-designer__quote">
+      {{ section.settings.quote }}
+    </div>
+    <div class="hgs-designer__attr">{{ section.settings.attribution | escape }}</div>
+  </div>
+</section>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  var el = document.getElementById('hgsDesigner-{{ section.id }}');
+  if (!el) return;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    el.classList.add('is-visible'); return;
+  }
+  new IntersectionObserver(function(entries, obs) {
+    entries.forEach(function(e) {
+      if (e.isIntersecting) { e.target.classList.add('is-visible'); obs.unobserve(e.target); }
+    });
+  }, { threshold: 0.15 }).observe(el);
+});
+</script>
+
+{% schema %}
+{
+  "name": "HGS Designer",
+  "tag": "div",
+  "class": "brand-hgs-section",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Designer photo"
+    },
+    {
+      "type": "richtext",
+      "id": "quote",
+      "label": "Quote",
+      "default": "<p>\"着るだけで自分の居場所を見つけられる。そんな服を作りたかった。ホームグラウンドは、手の中にある。\"</p>"
+    },
+    {
+      "type": "text",
+      "id": "attribution",
+      "label": "Attribution",
+      "default": "— Founder, HOME GROUND STORE"
+    }
+  ],
+  "presets": [
+    {
+      "name": "HGS Designer"
+    }
+  ]
+}
+{% endschema %}
