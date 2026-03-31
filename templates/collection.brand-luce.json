@@ -1,0 +1,87 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "luce_hero": {
+      "type": "brand-luce-hero",
+      "settings": {
+        "label": "Good Time Mall — Featured Brand",
+        "logo_text": "LUCE",
+        "sub_text": "Apparel",
+        "tagline": "Bold essentials for everyday culture."
+      }
+    },
+    "luce_concept": {
+      "type": "brand-luce-concept",
+      "settings": {
+        "label": "About the Brand"
+      }
+    },
+    "luce_lookbook": {
+      "type": "brand-luce-lookbook",
+      "blocks": {
+        "look_1": {
+          "type": "look",
+          "settings": {}
+        },
+        "look_2": {
+          "type": "look",
+          "settings": {}
+        },
+        "look_3": {
+          "type": "look",
+          "settings": {}
+        },
+        "look_4": {
+          "type": "look",
+          "settings": {}
+        }
+      },
+      "block_order": [
+        "look_1",
+        "look_2",
+        "look_3",
+        "look_4"
+      ],
+      "settings": {
+        "label": "Lookbook",
+        "season": "SS26 Collection"
+      }
+    },
+    "luce_products": {
+      "type": "brand-luce-products",
+      "settings": {
+        "products_to_show": 12
+      }
+    },
+    "luce_designer": {
+      "type": "brand-luce-designer",
+      "settings": {
+        "quote": "セカンドスキンのような服を作りたかった。考えずに手に取れるのに、着る瞬間に自分を洗練させるような感覚を目指しています。",
+        "attribution": "— Creative Director, LUCE"
+      }
+    },
+    "luce_cta": {
+      "type": "brand-luce-cta",
+      "settings": {
+        "heading": "Explore the full collection",
+        "button_text": "Shop LUCE"
+      }
+    }
+  },
+  "order": [
+    "luce_hero",
+    "luce_concept",
+    "luce_lookbook",
+    "luce_products",
+    "luce_designer",
+    "luce_cta"
+  ]
+}
