@@ -1,0 +1,77 @@
+<section class="brand-terra terra-collection" id="terraCollection-{{ section.id }}">
+  <div class="terra-collection__header">
+    <div class="terra-section-label">{{ section.settings.label | default: 'Collection' | escape }}</div>
+  </div>
+  <div class="terra-grid">
+    {%- for block in section.blocks -%}
+      <div class="terra-grid__item" {{ block.shopify_attributes }}>
+        {%- if block.settings.image != blank -%}
+          <img src="{{ block.settings.image | image_url: width: 1200 }}"
+               alt="Look {{ forloop.index | prepend: '0' | slice: -2, 2 }}"
+               loading="lazy"
+               width="1200"
+               height="1600" />
+        {%- else -%}
+          <div class="terra-grid__placeholder">Look {{ forloop.index | prepend: '0' | slice: -2, 2 }}</div>
+        {%- endif -%}
+      </div>
+    {%- endfor -%}
+  </div>
+</section>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  var el = document.getElementById('terraCollection-{{ section.id }}');
+  if (!el) return;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    el.classList.add('is-visible'); return;
+  }
+  new IntersectionObserver(function(entries, obs) {
+    entries.forEach(function(e) {
+      if (e.isIntersecting) { e.target.classList.add('is-visible'); obs.unobserve(e.target); }
+    });
+  }, { threshold: 0.1 }).observe(el);
+});
+</script>
+
+{% schema %}
+{
+  "name": "TERRA Collection",
+  "tag": "div",
+  "class": "brand-terra-section",
+  "max_blocks": 5,
+  "settings": [
+    {
+      "type": "text",
+      "id": "label",
+      "label": "Section label",
+      "default": "Collection — FW25"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "image",
+      "name": "Image",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "TERRA Collection",
+      "blocks": [
+        { "type": "image" },
+        { "type": "image" },
+        { "type": "image" },
+        { "type": "image" },
+        { "type": "image" }
+      ]
+    }
+  ]
+}
+{% endschema %}
